@@ -1,0 +1,29 @@
+name: link-check
+
+on:
+  schedule:
+    - cron: "17 6 3 * *"   # monthly
+  workflow_dispatch:
+
+jobs:
+  links:
+    # The sheets hold pointers, not copies — a dead link is the one thing that
+    # rots. Only confirmed 404/410/DNS fails; bot walls are notes.
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/check-links.mjs 2>&1 | tee /tmp/links.txt
+      - name: open an issue on confirmed dead links
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "Dead link(s) in the skill sheets ($(date +%Y-%m))" \
+            --body "$(printf 'The monthly link check found confirmed dead links.\n\n```\n%s\n```' "$(cat /tmp/links.txt)")" \
+            --label maintenance || true

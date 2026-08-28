@@ -1,0 +1,29 @@
+{
+  "name": "genart",
+  "displayName": "Generative Art",
+  "version": "0.1.0",
+  "description": "Create long-form generative art with Claude: deterministic hash-seeded rendering, resolution-agnostic output, traits and rarity design, preview capture, determinism verification tools, and platform guides for Art Blocks, 256ART, Verse, Highlight, Plottables and bootloader.art.",
+  "author": {
+    "name": "Camille Roux",
+    "url": "https://github.com/camilleroux"
+  },
+  "homepage": "https://github.com/camilleroux/genart-skill",
+  "repository": "https://github.com/camilleroux/genart-skill",
+  "license": "MIT",
+  "keywords": [
+    "generative-art",
+    "creative-coding",
+    "long-form",
+    "onchain",
+    "art-blocks",
+    "256art",
+    "bootloader",
+    "verse",
+    "p5js",
+    "threejs",
+    "canvas",
+    "svg",
+    "plotter",
+    "determinism"
+  ]
+}

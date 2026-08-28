@@ -1,0 +1,16 @@
+{
+  "name": "camilleroux-genart",
+  "owner": {
+    "name": "Camille Roux",
+    "url": "https://github.com/camilleroux"
+  },
+  "description": "Generative art tooling for Claude Code.",
+  "plugins": [
+    {
+      "name": "genart",
+      "source": "./",
+      "description": "Create long-form generative art with Claude: deterministic hash-seeded rendering, resolution-agnostic output, traits and rarity design, preview capture, determinism verification tools, and platform guides for Art Blocks, 256ART, Verse, Highlight, Plottables and bootloader.art.",
+      "category": "creative"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  scripts:
+    # The invariant: the shipped scripts and the documented contract must agree.
+    # tests/fixture follows the contract and must pass. The broken variant is
+    # DERIVED here from the good fixture (Math.random swapped in), so it can
+    # never drift out of sync — and it must fail with exit 1, for the right
+    # reason, not just fail somehow.
+    #
+    # Reproduce locally:
+    #   sed 's/stream(hash, "[a-z]*")/Math.random/g' tests/fixture/index.html > /tmp/broken/index.html
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm i playwright
+      - id: pw
+        run: echo "v=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-${{ runner.os }}-${{ steps.pw.outputs.v }}
+      - run: npx playwright install --with-deps chromium
+      - name: good fixture passes check.mjs
+        run: node scripts/check.mjs tests/fixture
+      - name: derived broken fixture fails check.mjs with exit 1
+        run: |
+          mkdir -p /tmp/broken
+          sed 's/stream(hash, "[a-z]*")/Math.random/g' tests/fixture/index.html > /tmp/broken/index.html
+          set +e
+          out=$(node scripts/check.mjs /tmp/broken); code=$?
+          set -e
+          echo "$out"
+          test "$code" -eq 1
+          echo "$out" | grep -q "FAIL"
+      - name: render.mjs single, grid, census
+        run: |
+          node scripts/render.mjs tests/fixture --hash 0xc0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0de --out /tmp/out.png
+          test -s /tmp/out.png
+          node scripts/render.mjs tests/fixture --grid 9 --out /tmp/sheet.png
+          test -s /tmp/sheet.png
+          node scripts/render.mjs tests/fixture --census 500 --edition-size 256

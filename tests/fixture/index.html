@@ -1,0 +1,110 @@
+<!doctype html>
+<!-- CI fixture for the plugin's scripts. NOT a starter template: it exists so
+     check.mjs and render.mjs have a known-good sketch to test against.
+     It implements the minimal contract from references/platforms/self-hosted.md:
+     ?hash= in, window.render(hash), window.$features, window.rendered. -->
+<html lang="en">
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; height: 100%; background: #111; }
+  canvas { display: block; width: 100%; height: 100%; object-fit: contain; }
+</style>
+<canvas id="c"></canvas>
+<script>
+  // --- PRNG (from references/determinism.md) ---------------------------------
+  function seedFromHash(hash) {
+    const hex = hash.replace(/^0x/i, "").padStart(64, "0").slice(-64);
+    const s = new Uint32Array(4);
+    for (let i = 0; i < 8; i++) {
+      const w = parseInt(hex.slice(i * 8, i * 8 + 8), 16) >>> 0;
+      s[i % 4] = (Math.imul(s[i % 4] ^ w, 0x9e3779b1) + i) >>> 0;
+    }
+    if (!(s[0] | s[1] | s[2] | s[3])) s[3] = 1;
+    return s;
+  }
+  function sfc32([a, b, c, d]) {
+    return function () {
+      a |= 0; b |= 0; c |= 0; d |= 0;
+      const t = (((a + b) | 0) + d) | 0;
+      d = (d + 1) | 0;
+      a = b ^ (b >>> 9);
+      b = (c + (c << 3)) | 0;
+      c = (c << 21) | (c >>> 11);
+      c = (c + t) | 0;
+      return (t >>> 0) / 4294967296;
+    };
+  }
+  function fnv1a(str) {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return h >>> 0;
+  }
+  function stream(hash, label) {
+    const s = seedFromHash(hash);
+    const k = fnv1a(label);
+    const m = [0, 1, 2, 3].map((i) => (s[i] ^ Math.imul(k + i, 0x9e3779b1)) >>> 0);
+    if (!(m[0] | m[1] | m[2] | m[3])) m[3] = 1;
+    const r = sfc32(m);
+    for (let i = 0; i < 12; i++) r();
+    return r;
+  }
+  const weighted = (r, entries) => {
+    let total = 0;
+    for (const [, w] of entries) total += w;
+    let x = r() * total;
+    for (const [v, w] of entries) { x -= w; if (x < 0) return v; }
+    return entries[entries.length - 1][0];
+  };
+
+  // --- Rarity table, decided before the code ---------------------------------
+  const PALETTES = [["Ember", 45], ["Ash", 30], ["Verdant", 18], ["Aurora", 7]];
+  const DENSITIES = [["Sparse", 25], ["Balanced", 55], ["Dense", 20]];
+  const HUES = { Ember: 15, Ash: 210, Verdant: 130, Aurora: 285 };
+  const COUNTS = { Sparse: 120, Balanced: 300, Dense: 700 };
+
+  function features(hash) {
+    const r = stream(hash, "features");
+    return { Palette: weighted(r, PALETTES), Density: weighted(r, DENSITIES) };
+  }
+
+  // --- Size and hash, frozen at load -----------------------------------------
+  const q = new URLSearchParams(location.search);
+  const W = +(q.get("width") ?? 800);
+  const H = +(q.get("height") ?? 800);
+  const initialHash =
+    q.get("hash") ?? "0x" + crypto.randomUUID().replace(/-/g, "").repeat(2).slice(0, 64);
+
+  // --- The whole render as one pure function of the hash ---------------------
+  window.render = function (hash) {
+    const f = features(hash);
+    const cv = document.getElementById("c");
+    cv.width = W;
+    cv.height = H;
+    const ctx = cv.getContext("2d");
+    const S = Math.min(W, H);
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate((W - S) / 2, (H - S) / 2);
+    ctx.scale(S, S);
+    ctx.lineWidth = 0.003;
+    const r = stream(hash, "layout");
+    const hue = HUES[f.Palette];
+    for (let i = 0; i < COUNTS[f.Density]; i++) {
+      ctx.strokeStyle = `hsl(${(hue + r() * 40 - 20) | 0} 70% ${(35 + r() * 45) | 0}%)`;
+      ctx.beginPath();
+      ctx.arc(r(), r(), r() * 0.1 + 0.005, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+    window.$features = f;
+    window.rendered = cv;
+    return cv;
+  };
+
+  window.render(initialHash);
+</script>
+</html>
