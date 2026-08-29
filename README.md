@@ -1,5 +1,9 @@
 # genart — a generative art skill for Claude Code
 
+[![Plugin version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcamilleroux%2Fgenart-skill%2Fmain%2F.claude-plugin%2Fplugin.json&query=%24.version&prefix=v&label=plugin&color=6f4fd8)](CHANGELOG.md)
+[![CI](https://github.com/camilleroux/genart-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/camilleroux/genart-skill/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **Create long-form generative art with AI assistance** — deterministic,
 hash-seeded, ready for onchain platforms like Art Blocks, 256ART, Verse,
 Highlight, Plottables and bootloader.art.
@@ -62,6 +66,47 @@ node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" myproject --batch 50      # indivi
 the sketch, render a seed, look at the PNG, adjust. The grid and the census are
 the edition-level views — what the rarity table actually produces.
 
+What `check.mjs` prints on a sketch that holds:
+
+```
+myproject  (size 600, 3 runs)
+
+repeatability
+  ok   0xa3f1a3f1a3… → 06669011
+  ok   0x77c277c277… → 7e5f6b7f
+
+distinctness
+  ok   two different hashes produce two different renders
+
+global state (A, B, A in one page)
+  ok   A=06669011 B=7e5f6b7f A'=06669011
+
+features
+  ok   stable across 3 runs: {"Palette":"Ash","Density":"Sparse"}
+
+all checks passed
+```
+
+And on the same sketch with one `Math.random()` left in — the broken variant CI
+derives from the fixture on every push, and requires to fail:
+
+```
+repeatability
+ FAIL  0xa3f1a3f1a3… → e8dec1f3 / b40e8a1f / dc9b8f1f
+ FAIL  0x77c277c277… → 32fa5f55 / e04d40ad / a55fea14
+
+global state (A, B, A in one page)
+ FAIL  A=e127ff40 B=55a66c50 A'=05545a48
+
+features
+ FAIL  changed between runs: {"Palette":"Ash",…} vs {"Palette":"Ember",…} vs {"Palette":"Verdant",…}
+
+4 failure(s)
+```
+
+`distinctness` still passes there: `Math.random()` does produce two different
+images. Each check covers what it covers, and no more.
+
 They need Playwright **in your project** (`npm i -D playwright && npx playwright
 install chromium` — they print this if it is missing). The plugin itself stays
 dependency-free: no package.json, nothing embedded.
@@ -94,6 +139,20 @@ broken variant derived from it, which must fail), and checks monthly that the
 URLs in the sheets still resolve — confirmed 404/DNS only, bot walls don't
 count — opening an issue when one dies. The sheets contain no volatile facts,
 so dead links are the only thing that rots.
+
+## Show what you make
+
+If you mint something with it, I would genuinely like to see it — open a
+[Discussion](https://github.com/camilleroux/genart-skill/discussions) with a
+render and the platform you released on, or post it and tag
+[@camillerouxart](https://x.com/camillerouxart). Pieces made with the skill get
+shared onward.
+
+Reference sheets are the easiest thing to contribute: a platform that is missing,
+a doc URL that moved, a mental model that is wrong. Issues and PRs welcome — the
+[editorial rules](AGENTS.md) are short.
+
+If it saved you an afternoon, a ⭐ is how the next artist finds it.
 
 ## Author
 
