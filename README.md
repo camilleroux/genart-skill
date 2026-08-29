@@ -15,6 +15,12 @@ really is deterministic before you mint it.
 Made by a generative artist, for generative artists using AI as a studio
 assistant — not as the artist.
 
+![Contact sheet of six seeds from Impossible Machine, each labelled with its token hash](docs/contact-sheet-impossible-machine.jpg)
+
+<sub>Six seeds of *Impossible Machine* (Camille Roux) — hand-drawn technical
+blueprints, one hash each. The edition-level view the scripts are there to give
+you: same code, same rules, one sheet per seed.</sub>
+
 ## Install
 
 ```
