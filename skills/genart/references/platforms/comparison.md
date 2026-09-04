@@ -17,6 +17,9 @@ sheet, fetch its docs.
 | **Plottables** (AB Engine) | Ethereum | onchain | one script (Art Blocks contract) | injected global | closed registry | no | yes |
 | **Self-hosted** | — | your choice | a web page | your choice | free | roll your own | optional |
 
+The table is shaped for mint platforms. **Artpoint** (`artpoint.md`) is a
+different animal — a screen-diffusion agency: no chain, no hash, no code of
+yours running anywhere. You deliver a finished video file.
 
 ## Choosing by what constrains you
 
@@ -35,6 +38,8 @@ sheet, fetch its docs.
 - **Pen plotter as the real output device** → Plottables (and read the plotter
   section of `../tooling.md`).
 - **No platform, full control** → `self-hosted.md`.
+- **The deliverable is a video on someone's screen, not a token** →
+  `artpoint.md`.
 
 ## Porting between platforms
 

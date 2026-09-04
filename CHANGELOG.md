@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 — 2026-09-04
+
+- **New platform sheet — Artpoint** (`references/platforms/artpoint.md`), the
+  first non-mint outlet in the corpus: a screen-diffusion agency where you
+  deliver a finished video file rather than code, and the output device is a
+  screen in a room where people work. Covers what that inverts (ambient tempo,
+  muted, loops that replay for hours, one master instead of a variant matrix)
+  and points at `tooling.md` §Video / §Perfect loops for the pipeline.
+- **A documented exception to "no values in platform sheets"** — Artpoint
+  publishes no artist specification, so the sheet carries the delivery spec
+  with a provenance stamp and a date instead of a dead pointer. Recorded in
+  `AGENTS.md` so it is not "fixed" away.
+
 ## 0.1.1 — 2026-09-04
 
 - **Fix — the scripts could not find Playwright once the plugin was installed.**

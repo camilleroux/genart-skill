@@ -6,7 +6,7 @@
 
 **Create long-form generative art with AI assistance** — deterministic,
 hash-seeded, ready for onchain platforms like Art Blocks, 256ART, Verse,
-Highlight, Plottables and bootloader.art.
+Highlight, Plottables and bootloader.art — or for screens, via Artpoint.
 
 This [Claude Code](https://claude.com/claude-code) plugin teaches Claude the
 working knowledge of the field: seeding a PRNG from a token hash, rendering the
@@ -47,7 +47,7 @@ One skill, `genart`, with reference sheets loaded on demand:
 - **tooling** — debug GUI, keyboard shortcuts, PNG and video export
 - **verification** — checking a sketch before minting, and what a test can't prove
 - **platforms** — Art Blocks, 256ART, Verse, Highlight, Plottables,
-  bootloader.art, self-hosted
+  bootloader.art, self-hosted, Artpoint (art on screen)
 
 ## Runnable scripts
 

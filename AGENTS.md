@@ -9,6 +9,10 @@ through the plugin system — this file is only for sessions editing the repo.
   values, no API field names in `references/platforms/*.md` — only the stable
   mental model, the doc URLs, and questions to ask those docs. Copied values go
   stale and are then worse than absent. Resist "just this one value".
+  `artpoint.md` is the documented exception: Artpoint publishes no artist
+  specification, so there is nothing to point at. Its delivery table carries
+  real values **with a provenance stamp and a date** — keep both, and do not
+  copy the pattern to a sheet whose platform has public docs.
 - **fxhash is never mentioned** (platform offline). Its concepts (mint-time
   params, preview trigger) are described neutrally in `self-hosted.md`.
 - Every reference sheet starts with `<!-- Verified: YYYY-MM-DD -->` — update it
