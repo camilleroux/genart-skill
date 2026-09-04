@@ -22,6 +22,7 @@ stored onchain and executed by an onchain generator that assembles the page.
 | `creator-onboarding/artists/2-staging-and-testing/` · `3-mainnet-launch/` · `faq/` | Staging, launch, edge cases |
 | `creator-onboarding/artists/flex-assets/` | Engine/Flex external assets |
 | `protocol/on-chain-generator/` · `protocol/postparams/` | Page assembly; post-mint params |
+| `developer/mcp-server/quick-start/` · `developer/mcp-server/capabilities/` | Art Blocks' own MCP server — connect it and ask it what it exposes, rather than reading its surface off a page |
 
 Community starter (unofficial): `https://github.com/ArtBlocks/artblocks-starter-template`
 
