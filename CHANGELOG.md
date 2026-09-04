@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1 — 2026-09-04
+
+- **The Art Blocks sheet points at the Art Blocks MCP server** — one row in
+  `artblocks.md`'s Docs table, naming `developer/mcp-server/quick-start/` and
+  `capabilities/`, since the section has no index page. Phrased as "connect it
+  and ask what it exposes" rather than listing its tools: the server's surface
+  moves faster than a sheet could track, so it stays a pointer like the rest.
+  Contributed by @jordanlyall, who disclosed being CPO at Art Blocks (#4),
+  closing the second half of #1.
+
 ## 0.2.0 — 2026-09-04
 
 - **New platform sheet — Artpoint** (`references/platforms/artpoint.md`), the
