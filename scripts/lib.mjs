@@ -7,11 +7,31 @@
 
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { extname, join } from "node:path";
+import { pathToFileURL } from "node:url";
 import process from "node:process";
 
 // Playwright lives in the artist's project, never in the plugin.
-export async function loadChromium() {
+//
+// The scripts run in place from the plugin cache, and a bare `import("playwright")`
+// resolves node_modules from the importing FILE — the plugin directory, which will
+// never contain the artist's install. So resolve from the sketch directory and the
+// cwd instead; the bare import stays last, for a repo checkout run from elsewhere.
+export async function loadChromium(dir) {
+  for (const from of [...new Set([dir, process.cwd()].filter(Boolean))]) {
+    let entry;
+    try {
+      entry = createRequire(join(from, "package.json")).resolve("playwright");
+    } catch {
+      continue; // not installed under this root — try the next one
+    }
+    // Resolved: a broken install must throw here, not be reported as missing.
+    // require.resolve() hands back the CJS entry, whose module.exports lands
+    // on .default — hence the two spellings.
+    const m = await import(pathToFileURL(entry).href);
+    return m.chromium ?? m.default.chromium;
+  }
   try {
     return (await import("playwright")).chromium;
   } catch {

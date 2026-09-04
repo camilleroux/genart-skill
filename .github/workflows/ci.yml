@@ -42,6 +42,18 @@ jobs:
           echo "$out"
           test "$code" -eq 1
           echo "$out" | grep -q "FAIL"
+      - name: scripts run from OUTSIDE the project (a plugin-cache install)
+        # The bug that shipped in 0.1.0 (#1): a bare import("playwright")
+        # resolves node_modules from the importing FILE. Every step above hides
+        # it, because node_modules sits next to scripts/ in a checkout — which
+        # is never true for an installed plugin. So copy the scripts out of the
+        # tree, where nothing above them holds a node_modules, and run again.
+        run: |
+          mkdir -p /tmp/plugin-cache
+          cp -r scripts /tmp/plugin-cache/
+          test ! -e /tmp/node_modules
+          node /tmp/plugin-cache/scripts/check.mjs tests/fixture
+
       - name: render.mjs single, grid, census
         run: |
           node scripts/render.mjs tests/fixture --hash 0xc0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0de --out /tmp/out.png

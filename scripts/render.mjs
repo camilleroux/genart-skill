@@ -16,8 +16,6 @@ import { join, resolve } from "node:path";
 import process from "node:process";
 import { loadChromium, cli, serve, launch, contextOptions, gotoSketch } from "./lib.mjs";
 
-const chromium = await loadChromium();
-
 const { positional, flag, has } = cli(process.argv.slice(2));
 const DIR = resolve(positional ?? ".");
 const SIZE = parseInt(flag("size", "800"), 10);
@@ -30,6 +28,8 @@ if (modes.length !== 1) {
   process.exit(2);
 }
 const MODE = modes[0];
+
+const chromium = await loadChromium(DIR);
 
 // --- Reproducible seed derivation (sfc32, in Node) ----------------------------
 // Kept in sync with references/determinism.md by hand. Note: changing this
