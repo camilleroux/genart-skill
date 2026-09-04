@@ -2,14 +2,16 @@
 name: genart
 description: >
   Craft long-form generative art for onchain platforms — Art Blocks, 256ART,
-  Verse, Highlight, Plottables, bootloader.art, or a self-hosted drop. Covers hash-seeded determinism,
+  Verse, Highlight, Plottables, bootloader.art, or a self-hosted drop — and for
+  screen diffusion channels such as Artpoint. Covers hash-seeded determinism,
   resolution-agnostic rendering, features and rarity design, preview capture
   signals, debug GUIs and image/video export shortcuts, verification of a sketch
   before minting, and the ethics of the field. Use when the user mentions
   generative art, gen art, creative coding, long-form, onchain art, a seeded
   sketch, a PRNG or deterministic randomness, traits, rarity, features, a mint,
-  a plotter or SVG output, or pastes platform APIs such as tokenData, $features,
-  inputData, $bootloader, BTLDR, hl-gen, or a base64 payload query param.
+  a plotter or SVG output, art on screen or delivering a piece as a video, or
+  pastes platform APIs such as tokenData, $features, inputData, $bootloader,
+  BTLDR, hl-gen, or a base64 payload query param.
 user-invokable: true
 argument-hint: "[platform|check|render] [path]"
 license: MIT
@@ -79,6 +81,7 @@ confirmed.
 | Plottables (pen plotter, AB Engine) | `references/platforms/plottables.md` |
 | bootloader.art — ask *which* bootloader | `references/platforms/bootloader.md` |
 | Self-hosted / no platform | `references/platforms/self-hosted.md` |
+| Artpoint — art on screen, you deliver a video, not code | `references/platforms/artpoint.md` |
 | Undecided between two | `references/platforms/comparison.md` |
 
 ## Where to look
