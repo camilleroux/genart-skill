@@ -15,14 +15,14 @@ import process from "node:process";
 import { resolve } from "node:path";
 import { loadChromium, cli, serve, launch, contextOptions, gotoSketch } from "./lib.mjs";
 
-const chromium = await loadChromium();
-
 const { positional, flag } = cli(process.argv.slice(2));
 const DIR = resolve(positional ?? ".");
 const SIZE = parseInt(flag("size", "600"), 10);
 const RUNS = parseInt(flag("runs", "3"), 10);
 const hashesArg = flag("hashes", null);
 const HASHES = hashesArg ? hashesArg.split(",") : ["0x" + "a3f1".repeat(16), "0x" + "77c2".repeat(16)];
+
+const chromium = await loadChromium(DIR);
 
 const { base, close } = await serve(DIR);
 const browser = await launch(chromium);

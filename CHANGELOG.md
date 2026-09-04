@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.1 — 2026-09-04
+
+- **Fix — the scripts could not find Playwright once the plugin was installed.**
+  `import("playwright")` resolves `node_modules` from the importing file, which
+  for an installed plugin is the plugin cache and never the artist's project:
+  `check.mjs` and `render.mjs` printed "This script needs Playwright" even when
+  it was correctly installed. They now resolve it from the sketch directory,
+  then the working directory. A repo checkout was the one layout that worked —
+  which is why CI never saw it, so CI now also runs the scripts from outside
+  the project. Reported by @jordanlyall (#1).
+
 ## 0.1.0 — 2026-08-28
 
 Initial release.

@@ -38,6 +38,8 @@ through the plugin system — this file is only for sessions editing the repo.
 ```
 npm i -D playwright && npx playwright install chromium   # once, local only
 node scripts/check.mjs tests/fixture                     # must exit 0
+rm -rf /tmp/pc && cp -r scripts /tmp/pc                  # the plugin-cache layout:
+node /tmp/pc/check.mjs tests/fixture                     # no node_modules above the scripts
 sed 's/stream(hash, "[a-z]*")/Math.random/g' tests/fixture/index.html > /tmp/b/index.html
 node scripts/check.mjs /tmp/b                            # must exit 1 with FAILs
 node scripts/render.mjs tests/fixture --hash 0x<64hex>   # writes out.png — look at it
