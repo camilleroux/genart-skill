@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2 — 2026-09-26
+
+- **The plugin has an icon** — `.claude-plugin/icon.svg`, a 3×3 grid of
+  Truchet tiles drawn from a fixed seed, so the directory stops falling back
+  to the publisher's GitHub avatar. Picked up from its conventional path, so
+  `plugin.json` gains no field.
+
 ## 0.2.1 — 2026-09-04
 
 - **The Art Blocks sheet points at the Art Blocks MCP server** — one row in
