@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.3 — 2026-10-02
+
+- **Fix — Artpoint's bitrate cap was off by a factor of eight.** The sheet
+  read "30 MB/s"; the team meant 30 Mbit/s, with 50 Mbit/s as the real ceiling
+  and the gap kept as margin. The delivery table now has its own Bitrate row,
+  and the traps name the dense piece left to the encoder's quality setting
+  that lands above the cap — cap it at encode, measure the delivered file.
+
 ## 0.2.2 — 2026-09-26
 
 - **The plugin has an icon** — `.claude-plugin/icon.svg`, a 3×3 grid of

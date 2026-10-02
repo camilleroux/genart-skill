@@ -19,7 +19,8 @@ a monthly rotation. No chain, no hash, no code of yours runs on their side.
 ## Delivery spec
 
 Artpoint publishes no artist specification. This is what the team asked for in
-2026-09 — **reconfirm with your contact**; it is private and it will drift.
+2026-09, bitrate clarified 2026-10 — **reconfirm with your contact**; it is
+private and it will drift.
 
 | | |
 |---|---|
@@ -28,7 +29,8 @@ Artpoint publishes no artist specification. This is what the team asked for in
 | Ratio | 16:9 and/or 9:16 |
 | Duration | 3–5 min if it does not loop, around 1 min if it does |
 | Frame rate | 30 fps |
-| Weight | 1.5 GB per file max, 30 MB/s max |
+| Weight | 1.5 GB per file max |
+| Bitrate | aim for 30 Mbit/s; 50 Mbit/s is the real ceiling, the gap is margin |
 
 ## Docs
 
@@ -38,12 +40,12 @@ the answers down and date them.
 
 ## Check before you render
 
-Container, resolution, ratio and weight caps · whether it must loop, which
-decides the duration · sound, or is every screen muted · which orientations are
-in the client's rooms · what they do to the file themselves: rescale, rotate,
-reframe · how long it stays up and how often it repeats in a day · the licence
-granted, its duration and territory, and the AI-training exclusion
-(`../ethics.md`) · what the curatorial text needs from you.
+Container, resolution, ratio, weight and bitrate caps · whether it must loop,
+which decides the duration · sound, or is every screen muted · which
+orientations are in the client's rooms · what they do to the file themselves:
+rescale, rotate, reframe · how long it stays up and how often it repeats in a
+day · the licence granted, its duration and territory, and the AI-training
+exclusion (`../ethics.md`) · what the curatorial text needs from you.
 
 ## Traps by design
 
@@ -52,5 +54,7 @@ reproducible) · a loop that accumulates (`x += v`) or damps, and so never
 closes · exporting at the preview size instead of re-rendering at UHD
 (`../resolution.md`) · a 16:9 cropped to 9:16 by someone who did not compose it
 · a delivered master nothing in its filename can regenerate · sound designed
-in, played on a muted screen · a rhythm that reads well in a 30-second review
-and is unbearable on day nine.
+in, played on a muted screen · a dense piece (fine lines, grain, many moving
+edges) left to the encoder's quality setting, landing above the bitrate cap —
+cap it at encode and measure the delivered file · a rhythm that reads well in
+a 30-second review and is unbearable on day nine.
