@@ -1,9 +1,9 @@
 ---
 name: genart
 description: >
-  Craft long-form generative art for onchain platforms — Art Blocks, 256ART,
-  Verse, Highlight, Plottables, bootloader.art, or a self-hosted drop — and for
-  screen diffusion channels such as Artpoint. Covers hash-seeded determinism,
+  Craft long-form generative art for onchain platforms — Art Blocks, ABX,
+  256ART, Verse, Highlight, Plottables, bootloader.art, or a self-hosted drop —
+  and for screen diffusion channels such as Artpoint. Covers hash-seeded determinism,
   resolution-agnostic rendering, features and rarity design, preview capture
   signals, debug GUIs and image/video export shortcuts, verification of a sketch
   before minting, and the ethics of the field. Use when the user mentions
@@ -75,6 +75,7 @@ confirmed.
 | Target | Fiche |
 |---|---|
 | Art Blocks (incl. Engine / Flex) | `references/platforms/artblocks.md` |
+| ABX — Art Blocks' self-serve protocol, deployed from its own CLI and agent skill | `references/platforms/abx.md` |
 | 256ART | `references/platforms/256art.md` |
 | Verse | `references/platforms/verse.md` |
 | Highlight | `references/platforms/highlight.md` |

@@ -13,6 +13,7 @@ stored onchain and executed by an onchain generator that assembles the page.
 - **Bytes cost gas**: deployment cost is proportional to script size; the practical ceiling is far below any technical limit.
 - Preview: a configured delay, or an explicit ready signal with a placement requirement that catches people out — check it.
 - **Engine / Flex** = same protocol, different curation; Flex adds external assets (changes the "no network" default). Prohibition (Base), Bright Moments and Plottables (own sheet: `plottables.md`) are Engine deployments — this contract applies there too.
+- **ABX** is Art Blocks' separate self-serve protocol — own contracts, no curation, own sheet: `abx.md`.
 
 ## Docs — start at `https://docs.artblocks.io/`
 
