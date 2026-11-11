@@ -8,6 +8,7 @@ sheet, fetch its docs.
 | | Chain | Storage | You deliver | Hash reaches you via | Libraries | Mint-time params | Minify? |
 |---|---|---|---|---|---|---|---|
 | **Art Blocks** | Ethereum | onchain | one script | injected global | closed registry, one of them | post-mint params exist | yes, bytes cost gas |
+| **ABX** | EVM multi-chain | onchain, or IPFS / Arweave | one script, or a web page | injected token data, or encoded URL parameter | registry on some chains only, declared at deploy; free in a directory | post-mint params exist | yes on the onchain path |
 | **256ART** | Ethereum | onchain | code + trait table | injected object, plus live chain state | onchain filesystem only | no | yes |
 | **Verse** | Ethereum | IPFS | a web page | URL parameter | free | no | optional |
 | **bootloader `svg-js`** | Tezos | onchain | inline JS → SVG | injected object | **none** | no | **no — formatting is the work** |
@@ -34,7 +35,8 @@ yours running anywhere. You deliver a finished video file.
   deliberately. Read the trade-off in that sheet before committing.
 - **p5, quickly, with the seeding already handled** → bootloader `p5-js`, or
   Highlight, whose platform script hands you seeded draws.
-- **Self-serve on an EVM chain, no application** → Highlight.
+- **Self-serve on an EVM chain, no application** → Highlight, or ABX if the
+  script should live onchain and your agent should run the deploy.
 - **Pen plotter as the real output device** → Plottables (and read the plotter
   section of `../tooling.md`).
 - **No platform, full control** → `self-hosted.md`.
