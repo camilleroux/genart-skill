@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.5 — 2026-11-11
+
+- **New platform sheet — ABX** (`references/platforms/abx.md`), Art Blocks'
+  self-serve protocol: you deploy your own contract from the `abx` CLI, which
+  ships its own agent skill. The split: this plugin owns the sketch and the
+  checks, ABX's skill owns the deploy. Tested end to end on Base Sepolia. The
+  run's main lesson is in the sheet: an onchain script does not make the image
+  or the traits onchain, so each public surface is its own decision. Listed in
+  `SKILL.md`, `artblocks.md` and `comparison.md`. Contributed by @jordanlyall
+  (#6).
+
 ## 0.2.4 — 2026-11-11
 
 - **Fix — the script commands resolved to `/scripts/check.mjs`.** The skill

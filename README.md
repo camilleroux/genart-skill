@@ -46,7 +46,7 @@ One skill, `genart`, with reference sheets loaded on demand:
 - **ethics** — originality, attribution, licences, AI disclosure
 - **tooling** — debug GUI, keyboard shortcuts, PNG and video export
 - **verification** — checking a sketch before minting, and what a test can't prove
-- **platforms** — Art Blocks, 256ART, Verse, Highlight, Plottables,
+- **platforms** — Art Blocks, ABX, 256ART, Verse, Highlight, Plottables,
   bootloader.art, self-hosted, Artpoint (art on screen)
 
 ## Runnable scripts
