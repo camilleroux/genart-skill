@@ -7,57 +7,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  scripts:
-    # The invariant: the shipped scripts and the documented contract must agree.
-    # tests/fixture follows the contract and must pass. The broken variant is
-    # DERIVED here from the good fixture (Math.random swapped in), so it can
-    # never drift out of sync — and it must fail with exit 1, for the right
-    # reason, not just fail somehow.
-    #
-    # Reproduce locally:
-    #   sed 's/stream(hash, "[a-z]*")/Math.random/g' tests/fixture/index.html > /tmp/broken/index.html
+  directory-policy:
+    # The repo root is the plugin folder. Anthropic's directory refuses, from
+    # non-Verified organizations, any file that is not Markdown, text, JSON,
+    # YAML or a PNG/JPEG/GIF/WebP/ICO image, and any file starting with #!.
+    # Catch it here, before the directory refuses a release.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm i playwright
-      - id: pw
-        run: echo "v=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: pw-${{ runner.os }}-${{ steps.pw.outputs.v }}
-      - run: npx playwright install --with-deps chromium
-      - name: good fixture passes check.mjs
-        run: node scripts/check.mjs tests/fixture
-      - name: derived broken fixture fails check.mjs with exit 1
+      - name: only text and allowed images
         run: |
-          mkdir -p /tmp/broken
-          sed 's/stream(hash, "[a-z]*")/Math.random/g' tests/fixture/index.html > /tmp/broken/index.html
-          set +e
-          out=$(node scripts/check.mjs /tmp/broken); code=$?
-          set -e
-          echo "$out"
-          test "$code" -eq 1
-          echo "$out" | grep -q "FAIL"
-      - name: scripts run from OUTSIDE the project (a plugin-cache install)
-        # The bug that shipped in 0.1.0 (#1): a bare import("playwright")
-        # resolves node_modules from the importing FILE. Every step above hides
-        # it, because node_modules sits next to scripts/ in a checkout — which
-        # is never true for an installed plugin. So copy the scripts out of the
-        # tree, where nothing above them holds a node_modules, and run again.
-        run: |
-          mkdir -p /tmp/plugin-cache
-          cp -r scripts /tmp/plugin-cache/
-          test ! -e /tmp/node_modules
-          node /tmp/plugin-cache/scripts/check.mjs tests/fixture
-
-      - name: render.mjs single, grid, census
-        run: |
-          node scripts/render.mjs tests/fixture --hash 0xc0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0dec0de --out /tmp/out.png
-          test -s /tmp/out.png
-          node scripts/render.mjs tests/fixture --grid 9 --out /tmp/sheet.png
-          test -s /tmp/sheet.png
-          node scripts/render.mjs tests/fixture --census 500 --edition-size 256
+          bad=$(git ls-files \
+            | grep -vE '\.(md|txt|json|ya?ml|png|jpe?g|gif|webp|ico)$' \
+            | grep -vxE '\.gitignore|LICENSE|\.claude-plugin/icon\.svg' || true)
+          shebang=$(git ls-files -z | xargs -0 grep -lI '^#!' -- 2>/dev/null \
+            | while read -r f; do head -c2 "$f" | grep -q '#!' && echo "$f"; done || true)
+          if [ -n "$bad$shebang" ]; then
+            echo "Refused by the directory policy:"; printf '%s\n' $bad $shebang
+            exit 1
+          fi
+          echo "ok"

@@ -39,7 +39,7 @@ what you will lock, and when.
 ## Two checkers, two jobs
 
 The CLI re-renders seeds in fresh contexts inside the real generator document
-and compares pixels and traits. `check.mjs` adds A-B-A contamination and
+and compares pixels and traits. The harness (`verification.md`) adds A-B-A contamination and
 distinctness, behind a dev page that loads the script, feeds `?hash=` in as the
 token data's seed and stubs the helper (`self-hosted.md` contract). Only the
 script deploys — keep that page out of any directory upload. Each tool brings

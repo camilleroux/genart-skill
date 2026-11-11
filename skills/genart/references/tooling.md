@@ -97,11 +97,6 @@ physical pen width, and sort/merge paths to reduce pen travel on large plots.
 
 ## Contact sheets
 
-The most useful tuning tool for an edition — shipped ready to run:
-
-```
-node <scripts>/render.mjs . --grid 50          # one sheet
-node <scripts>/render.mjs . --batch 50 --size 2400   # individual PNGs
-```
-
-`<scripts>` and the contract: `verification.md`.
+The most useful tuning tool for an edition: N seeds on one image, hash and
+features under each tile. Built by the project's harness — spec in
+`verification.md` (*Views*), along with the batch export of full-size PNGs.

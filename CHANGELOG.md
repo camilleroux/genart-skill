@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0 — 2026-11-11
+
+- **The plugin ships no code any more.** Anthropic's directory now refuses,
+  from non-Verified organizations, any file that is not Markdown, text, JSON,
+  YAML or an image, and any frontmatter key outside its list; 0.2.4 and 0.2.5
+  were refused on both counts. `check.mjs`, `render.mjs`, `lib.mjs` and the CI
+  fixture are gone.
+- **The checks are now a spec.** `verification.md` describes the harness —
+  server, pinned launch flags, the "done" signal, pixel hashing in the page,
+  the four checks, the contact sheet, census and batch views — and Claude
+  writes it once in the artist's project, then reuses it. Tested: a fresh
+  session built it from the spec alone, passed the reference sketch, failed
+  its `Math.random` copy on 5 checks, and produced the sheet and the census.
+- **The link check is inline** in `link-check.yml`, which now also fails the
+  step on a dead link (`shell: bash` adds pipefail; `| tee` used to swallow
+  the exit code).
+- **Frontmatter: `user-invokable` removed** — a misspelling of
+  `user-invocable` that never did anything, and one of the refused keys.
+
 ## 0.2.5 — 2026-11-11
 
 - **New platform sheet — ABX** (`references/platforms/abx.md`), Art Blocks'

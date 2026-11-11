@@ -1,7 +1,5 @@
 node_modules
 
-# Created by the local `npm i -D playwright` documented in AGENTS.md. The plugin
-# ships zero dependencies and no package.json — never commit these. Anchored, so
-# a fixture that legitimately needs its own package.json is not silently ignored.
+# The plugin ships zero dependencies and no package.json — never commit these.
 /package.json
 /package-lock.json

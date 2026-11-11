@@ -25,33 +25,33 @@ through the plugin system — this file is only for sessions editing the repo.
 
 ## Architecture invariants
 
+- **Text only in the repo.** The repo root is the plugin folder, and Anthropic's
+  directory refuses, from non-Verified organizations, any file that is not
+  Markdown, text, JSON, YAML or a PNG/JPEG/GIF/WebP/ICO image, or that starts
+  with `#!`. No `.mjs`, no `.html`, no fixture. CI code lives inline in the
+  workflow YAML (see `link-check.yml`).
+- **Frontmatter: standard keys only.** A misspelt or custom key in a skill's
+  frontmatter also gets a version refused.
+- **The checks are a spec, not a script.** `references/verification.md` says what
+  the harness must do; Claude writes it in the artist's project. Keep the spec
+  precise enough to rebuild the same harness twice — launch flags, the "done"
+  signal, pixel hashing in the page.
 - **Zero dependencies in the plugin.** No package.json. Playwright lives in the
-  artist's project; scripts print the install command when it is missing.
-- Scripts run **in place**, never copied into projects. Write `${CLAUDE_PLUGIN_ROOT}`
-  (braces) and only in `SKILL.md`: Claude Code substitutes it there, but Bash
-  has no such env var and reference sheets are not substituted — they say `<scripts>`.
-- `scripts/lib.mjs` holds the shared contract encoding (launch flags,
-  "render is done" wait, server). `check.mjs` and `render.mjs` must both use
-  it — duplicating any of it lets the checker and renderer silently diverge.
-- `tests/fixture/` is the sketch contract incarnate (defined in
-  `references/platforms/self-hosted.md`). The broken variant is **derived by
-  sed in CI**, never stored — see `.github/workflows/ci.yml`.
+  artist's project.
 - The version lives in `.claude-plugin/plugin.json` only. A release = bump it
   there + add a `CHANGELOG.md` entry (the update-communication channel).
 
 ## Testing
 
 ```
-npm i -D playwright && npx playwright install chromium   # once, local only
-node scripts/check.mjs tests/fixture                     # must exit 0
-rm -rf /tmp/pc && cp -r scripts /tmp/pc                  # the plugin-cache layout:
-node /tmp/pc/check.mjs tests/fixture                     # no node_modules above the scripts
-sed 's/stream(hash, "[a-z]*")/Math.random/g' tests/fixture/index.html > /tmp/b/index.html
-node scripts/check.mjs /tmp/b                            # must exit 1 with FAILs
-node scripts/render.mjs tests/fixture --hash 0x<64hex>   # writes out.png — look at it
-node scripts/render.mjs tests/fixture --grid 9 && node scripts/render.mjs tests/fixture --census 500
-node scripts/check-links.mjs                             # no confirmed dead links
 claude plugin validate .                                 # must pass
+git ls-files | grep -vE '\.(md|txt|json|ya?ml|png|jpe?g|gif|webp|ico)$'
+                                                         # only .gitignore, LICENSE, the icon (ci.yml enforces it)
 ```
 
-Never commit `node_modules` (gitignored; local Playwright install only).
+After changing `verification.md`: give a headless session the plugin and a
+sample sketch that follows the contract (`claude -p --plugin-dir .`), have it
+write the harness, and check it passes the sketch and FAILs a `Math.random`
+copy. Read the harness it wrote — that is what artists will run.
+
+Never commit `node_modules`.

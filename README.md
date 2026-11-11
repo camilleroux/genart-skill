@@ -49,68 +49,25 @@ One skill, `genart`, with reference sheets loaded on demand:
 - **platforms** — Art Blocks, ABX, 256ART, Verse, Highlight, Plottables,
   bootloader.art, self-hosted, Artpoint (art on screen)
 
-## Runnable scripts
+## Checking and rendering
 
-Two scripts ship with the plugin and run in place — Claude (or you) never copies
-them into a project, so updating the plugin updates them everywhere. Claude gets
-the absolute `<plugin>` path from the skill; by hand, it is a clone of this repo:
+The plugin ships no code — only Markdown. When a sketch needs checking or
+rendering, Claude writes a small Playwright harness **in your project**,
+following the spec in `references/verification.md`, and reuses it from then on:
 
-```
-node <plugin>/scripts/check.mjs  myproject          # determinism checks
-node <plugin>/scripts/render.mjs myproject --hash 0x…      # one PNG
-node <plugin>/scripts/render.mjs myproject --grid 50       # contact sheet
-node <plugin>/scripts/render.mjs myproject --census 5000   # rarity, measured
-node <plugin>/scripts/render.mjs myproject --batch 50      # individual PNGs
-```
+- **check** — repeatability, distinctness, global-state contamination (A, B, A
+  in one page), feature stability
+- **one render** — a PNG Claude looks at before judging any visual change
+- **contact sheet**, **census** (rarity, measured), **batch** (full-size PNGs)
 
-`render.mjs --hash` is what lets Claude close the visual loop on its own: edit
-the sketch, render a seed, look at the PNG, adjust. The grid and the census are
-the edition-level views — what the rarity table actually produces.
+The harness lives in your repo, so you can read it, run it yourself, and keep it
+in CI. It needs Playwright as a dev dependency (`npm i -D playwright && npx
+playwright install chromium`). Claude proves it once by making it fail on a
+copy of your sketch with a `Math.random()` left in.
 
-What `check.mjs` prints on a sketch that holds:
-
-```
-myproject  (size 600, 3 runs)
-
-repeatability
-  ok   0xa3f1a3f1a3… → 06669011
-  ok   0x77c277c277… → 7e5f6b7f
-
-distinctness
-  ok   two different hashes produce two different renders
-
-global state (A, B, A in one page)
-  ok   A=06669011 B=7e5f6b7f A'=06669011
-
-features
-  ok   stable across 3 runs: {"Palette":"Ash","Density":"Sparse"}
-
-all checks passed
-```
-
-And on the same sketch with one `Math.random()` left in — the broken variant CI
-derives from the fixture on every push, and requires to fail:
-
-```
-repeatability
- FAIL  0xa3f1a3f1a3… → e8dec1f3 / b40e8a1f / dc9b8f1f
- FAIL  0x77c277c277… → 32fa5f55 / e04d40ad / a55fea14
-
-global state (A, B, A in one page)
- FAIL  A=e127ff40 B=55a66c50 A'=05545a48
-
-features
- FAIL  changed between runs: {"Palette":"Ash",…} vs {"Palette":"Ember",…} vs {"Palette":"Verdant",…}
-
-4 failure(s)
-```
-
-`distinctness` still passes there: `Math.random()` does produce two different
-images. Each check covers what it covers, and no more.
-
-They need Playwright **in your project** (`npm i -D playwright && npx playwright
-install chromium` — they print this if it is missing). The plugin itself stays
-dependency-free: no package.json, nothing embedded.
+Why no shipped scripts: Anthropic's plugin directory accepts code only from
+Verified organizations, and the checks are short enough to rebuild from a
+precise spec.
 
 The contract a sketch must follow (three lines of shim for any platform) and
 what the checks can and cannot prove are in `references/verification.md`.
@@ -135,10 +92,8 @@ where the line falls.
 
 ## Maintenance
 
-CI runs the scripts against a known-good fixture on every push (and against a
-broken variant derived from it, which must fail), and checks monthly that the
-URLs in the sheets still resolve — confirmed 404/DNS only, bot walls don't
-count — opening an issue when one dies. The sheets contain no volatile facts,
+CI checks monthly that the URLs in the sheets still resolve — confirmed
+404/DNS only, bot walls don't count — opening an issue when one dies. The sheets contain no volatile facts,
 so dead links are the only thing that rots.
 
 ## Show what you make

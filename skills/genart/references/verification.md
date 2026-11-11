@@ -19,37 +19,46 @@ case) for:
 
 A legitimate hit (dev-only hash generator) deserves a comment saying why.
 
-## The scripts
+## The harness — written in the artist's project
 
-Run from the plugin, never copied; Playwright lives in the artist's project
-(they print the install command if missing). `<scripts>` = the absolute
-path in SKILL.md's *Runnable scripts* table:
+The plugin ships no code. When a check or a render is needed, write one small
+Node script in the artist's project (`tools/harness.mjs` by default), then
+reuse and fix it there — do not rewrite it per request.
 
-```
-node <scripts>/check.mjs  <dir> [--size 600] [--runs 3] [--hashes 0x…,0x…]
-node <scripts>/render.mjs <dir> --hash 0x… | --grid N | --census N [--edition-size E]
-```
+- **Playwright in the project**: `npm i -D playwright && npx playwright install chromium`.
+- **Serve the folder over local HTTP**, ephemeral port — `file://` breaks ES modules and `getImageData`.
+- **Load** `?hash=<h>&width=<s>&height=<s>`. **Done** = `window.rendered` is set, then `await document.fonts.ready` — one definition of done for every mode.
+- **Hash pixels inside the page**: `getImageData` (2D) or `readPixels` (WebGL), SHA-256 through `crypto.subtle`.
+- **PNG** = `canvas.toDataURL("image/png")` in the page, decoded in Node — no image library.
+- **Print one line per test** — `ok`/`FAIL`, short pixel hashes — and exit non-zero on any failure.
+- **Prove it once**: swap a seeded draw for `Math.random` in a copy of the sketch; the harness must FAIL on it. A checker never seen failing proves nothing.
 
 Contract assumed (defined in `platforms/self-hosted.md`; any platform sketch
 satisfies it with a few lines of dev shim): hash from `?hash=`, size from
 `?width=`/`?height=`, `window.rendered` = finished canvas, `window.render(hash)`
 exposed (required for census and the A-B-A test), optionally `window.$features`.
 
-## check.mjs — four tests, and why each exists
+## Checks — four tests, and why each exists
+
+Two fixed, different hashes; three runs each, a fresh browser context per run.
 
 - **Repeatability** — same hash, fresh contexts → identical pixels. Catches unseeded randomness and time dependence.
-- **Distinctness** — different hashes → different renders. Caught a real bug in `determinism.md`'s own `seedFromHash` (XOR-folding collapsed patterned hashes) while repeatability stayed green.
-- **Global state (A, B, A in one page)** — render A, B, A *without reloading*; the two A's must match. Catches module-level caches, pools, unreset accumulators — invisible to fresh-page repeatability, and platforms do render twice in one page.
-- **Feature stability** — same hash → same features, or the mint metadata can disagree with the artwork forever.
+- **Distinctness** — the two hashes → different renders. Caught a real bug in `determinism.md`'s own `seedFromHash` (XOR-folding collapsed patterned hashes) while repeatability stayed green.
+- **Global state (A, B, A in one page)** — `window.render` A, B, A *without reloading*; the two A's must match. Catches module-level caches, pools, unreset accumulators — invisible to fresh-page repeatability, and platforms do render twice in one page.
+- **Feature stability** — `window.$features` identical across the repeatability runs, or the mint metadata can disagree with the artwork forever.
 
-## render.mjs
+## Views
 
-- `--hash` → one PNG. The visual loop: edit, render, **look**, adjust.
-- `--grid N` → contact sheet, hash + features under each tile; failed seeds marked red.
-- `--census N --edition-size E` → measured feature distribution with the `features.md` warnings (≥80% values, expected-count-<1, duplicate tuples). A sample estimates — a declared-but-unseen value may still be a threshold bug.
-- `--batch N --size 2400 [--out dir] [--hashes 0x…,0x…]` → N individual full-resolution PNGs, one file per seed, hash in the filename.
+- **One render** → a PNG for one hash, then **look at it**. The visual loop: edit, render, look, adjust.
+- **Contact sheet** → N seeds, each downscaled in the page, composed on a canvas in a blank page; hash and features under each tile; a failed seed is a red tile, not a crashed sheet.
+- **Census** → N seeds through `window.render` in one page: counts per trait value, distinct feature tuples. Warn on a value ≥80%, an expected count <1 in the edition, duplicate tuples (`features.md`). List failed seeds grouped by error — a crash tied to one trait value silently deletes it from the counts. A sample estimates; a declared-but-unseen value may still be a threshold bug.
+- **Batch** → one full-resolution PNG per seed, hash in the filename.
+- **Seeds** for sheet, census and batch come from a fixed seed-of-seeds through the PRNG in `determinism.md` — print it, so the sheet can be rebuilt.
 
 ## The pinned environment, and why
+
+Launch flags and context options for every render the harness makes:
+
 
 - `deviceScaleFactor: 1` — retina doubles the buffer, nothing compares.
 - `--force-color-profile=srgb` — otherwise output depends on the monitor profile.

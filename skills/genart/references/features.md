@@ -44,7 +44,7 @@ boundary value flips the trait per browser (`determinism.md`).
 
 ## What shows up only after the mint
 
-Measure over thousands of seeds (`render.mjs --census`, see
+Measure over thousands of seeds (a census, see
 `verification.md`):
 
 - **A value that never appears** — usually an off-by-one threshold.

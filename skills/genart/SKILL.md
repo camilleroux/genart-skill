@@ -12,7 +12,6 @@ description: >
   a plotter or SVG output, art on screen or delivering a piece as a video, or
   pastes platform APIs such as tokenData, $features, inputData, $bootloader,
   BTLDR, hl-gen, or a base64 payload query param.
-user-invokable: true
 argument-hint: "[platform|check|render] [path]"
 license: MIT
 metadata:
@@ -97,20 +96,19 @@ confirmed.
 | "Is my sketch actually deterministic?", pre-mint checking, what a test can and cannot prove | `references/verification.md` |
 | Techniques, tutorials, libraries, inspiration, what other artists use | Fetch https://github.com/camilleroux/awesome-generative-art — a maintained list; do not paraphrase it from memory |
 
-## Runnable scripts
+## Checking and looking
 
-Two scripts ship with the plugin and run **in place** — never copy them into a
-project. They need Playwright installed in the artist's project and print the
-install command if it is missing. Contract and details: `references/verification.md`.
-The paths below are absolute — reference sheets write `<scripts>/` for this directory.
+The plugin ships no code. For checks and renders, write a small Playwright
+harness in the artist's project — once, following `references/verification.md`
+— and reuse it for the rest of the project.
 
-| Command | Does |
+| Mode | Does |
 |---|---|
-| `node "${CLAUDE_PLUGIN_ROOT}/scripts/check.mjs" <dir>` | Determinism: repeatability, distinctness, global-state contamination, feature stability |
-| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --hash 0x…` | One PNG — render it, then **look at it** with Read before judging any visual change |
-| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --grid N` | Contact sheet, hash + features under each tile |
-| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --census N --edition-size E` | Real feature distribution vs the rarity table |
-| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --batch N --size 2400` | N individual full-res PNGs, hash-named — portfolio/print export |
+| check | Determinism: repeatability, distinctness, global-state contamination, feature stability |
+| one render | One PNG — render it, then **look at it** with Read before judging any visual change |
+| contact sheet | N seeds on one image, hash + features under each tile |
+| census | Real feature distribution vs the rarity table, for an edition size |
+| batch | N individual full-res PNGs, hash-named — portfolio/print export |
 
 When asked to change how a piece looks, close the loop yourself: edit → render
 one hash → Read the PNG → judge → adjust. Do not describe a visual change you
@@ -123,6 +121,6 @@ have not looked at.
 2. **Decide the rarity table before coding.** It is much harder to retrofit.
 3. **Build.** Defaults above; deviations discussed, not silently taken.
 4. **Look at many outputs, not one.** A single good render proves nothing —
-   `render.mjs --grid` exists for this.
-5. **Check before minting** — `check.mjs`, then `references/verification.md` for
+   the harness's contact sheet exists for this.
+5. **Check before minting** — the harness's check, then `references/verification.md` for
    what the green result does and does not prove.
