@@ -22,11 +22,12 @@ A legitimate hit (dev-only hash generator) deserves a comment saying why.
 ## The scripts
 
 Run from the plugin, never copied; Playwright lives in the artist's project
-(they print the install command if missing):
+(they print the install command if missing). `<scripts>` = the absolute
+path in SKILL.md's *Runnable scripts* table:
 
 ```
-node "$CLAUDE_PLUGIN_ROOT/scripts/check.mjs"  <dir> [--size 600] [--runs 3] [--hashes 0x…,0x…]
-node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" <dir> --hash 0x… | --grid N | --census N [--edition-size E]
+node <scripts>/check.mjs  <dir> [--size 600] [--runs 3] [--hashes 0x…,0x…]
+node <scripts>/render.mjs <dir> --hash 0x… | --grid N | --census N [--edition-size E]
 ```
 
 Contract assumed (defined in `platforms/self-hosted.md`; any platform sketch

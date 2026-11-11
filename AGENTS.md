@@ -27,7 +27,9 @@ through the plugin system — this file is only for sessions editing the repo.
 
 - **Zero dependencies in the plugin.** No package.json. Playwright lives in the
   artist's project; scripts print the install command when it is missing.
-- Scripts run **in place** via `$CLAUDE_PLUGIN_ROOT`, never copied into projects.
+- Scripts run **in place**, never copied into projects. Write `${CLAUDE_PLUGIN_ROOT}`
+  (braces) and only in `SKILL.md`: Claude Code substitutes it there, but Bash
+  has no such env var and reference sheets are not substituted — they say `<scripts>`.
 - `scripts/lib.mjs` holds the shared contract encoding (launch flags,
   "render is done" wait, server). `check.mjs` and `render.mjs` must both use
   it — duplicating any of it lets the checker and renderer silently diverge.

@@ -100,8 +100,8 @@ physical pen width, and sort/merge paths to reduce pen travel on large plots.
 The most useful tuning tool for an edition — shipped ready to run:
 
 ```
-node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" . --grid 50          # one sheet
-node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" . --batch 50 --size 2400   # individual PNGs
+node <scripts>/render.mjs . --grid 50          # one sheet
+node <scripts>/render.mjs . --batch 50 --size 2400   # individual PNGs
 ```
 
-Contract in `verification.md`.
+`<scripts>` and the contract: `verification.md`.

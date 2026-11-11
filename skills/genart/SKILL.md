@@ -101,14 +101,15 @@ confirmed.
 Two scripts ship with the plugin and run **in place** — never copy them into a
 project. They need Playwright installed in the artist's project and print the
 install command if it is missing. Contract and details: `references/verification.md`.
+The paths below are absolute — reference sheets write `<scripts>/` for this directory.
 
 | Command | Does |
 |---|---|
-| `node "$CLAUDE_PLUGIN_ROOT/scripts/check.mjs" <dir>` | Determinism: repeatability, distinctness, global-state contamination, feature stability |
-| `node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" <dir> --hash 0x…` | One PNG — render it, then **look at it** with Read before judging any visual change |
-| `node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" <dir> --grid N` | Contact sheet, hash + features under each tile |
-| `node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" <dir> --census N --edition-size E` | Real feature distribution vs the rarity table |
-| `node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" <dir> --batch N --size 2400` | N individual full-res PNGs, hash-named — portfolio/print export |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/check.mjs" <dir>` | Determinism: repeatability, distinctness, global-state contamination, feature stability |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --hash 0x…` | One PNG — render it, then **look at it** with Read before judging any visual change |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --grid N` | Contact sheet, hash + features under each tile |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --census N --edition-size E` | Real feature distribution vs the rarity table |
+| `node "${CLAUDE_PLUGIN_ROOT}/scripts/render.mjs" <dir> --batch N --size 2400` | N individual full-res PNGs, hash-named — portfolio/print export |
 
 When asked to change how a piece looks, close the loop yourself: edit → render
 one hash → Read the PNG → judge → adjust. Do not describe a visual change you

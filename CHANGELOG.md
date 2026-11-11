@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.4 — 2026-11-11
+
+- **Fix — the script commands resolved to `/scripts/check.mjs`.** The skill
+  wrote `$CLAUDE_PLUGIN_ROOT`, expecting an environment variable; Claude Code
+  exports none to Bash and only substitutes the braced `${CLAUDE_PLUGIN_ROOT}`
+  in `SKILL.md`. `SKILL.md` now uses the braced form, so Claude reads an
+  absolute path; `verification.md` and `tooling.md`, which are not
+  substituted, write `<scripts>/` and point back to it. Reported by
+  @jordanlyall in #6.
+
 ## 0.2.3 — 2026-10-02
 
 - **Fix — Artpoint's bitrate cap was off by a factor of eight.** The sheet

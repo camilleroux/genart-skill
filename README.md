@@ -52,14 +52,15 @@ One skill, `genart`, with reference sheets loaded on demand:
 ## Runnable scripts
 
 Two scripts ship with the plugin and run in place — Claude (or you) never copies
-them into a project, so updating the plugin updates them everywhere:
+them into a project, so updating the plugin updates them everywhere. Claude gets
+the absolute `<plugin>` path from the skill; by hand, it is a clone of this repo:
 
 ```
-node "$CLAUDE_PLUGIN_ROOT/scripts/check.mjs"  myproject          # determinism checks
-node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" myproject --hash 0x…      # one PNG
-node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" myproject --grid 50       # contact sheet
-node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" myproject --census 5000   # rarity, measured
-node "$CLAUDE_PLUGIN_ROOT/scripts/render.mjs" myproject --batch 50      # individual PNGs
+node <plugin>/scripts/check.mjs  myproject          # determinism checks
+node <plugin>/scripts/render.mjs myproject --hash 0x…      # one PNG
+node <plugin>/scripts/render.mjs myproject --grid 50       # contact sheet
+node <plugin>/scripts/render.mjs myproject --census 5000   # rarity, measured
+node <plugin>/scripts/render.mjs myproject --batch 50      # individual PNGs
 ```
 
 `render.mjs --hash` is what lets Claude close the visual loop on its own: edit
